@@ -35,7 +35,6 @@ var clearCells = function() {
 };
 
 var loadScatterPoints = function(points) {
-    console.log(points);
     var numPoints = points['x'].length;
     data = [];
 
@@ -58,8 +57,6 @@ var loadScatterPoints = function(points) {
 	col = Math.min(Math.floor((x - minx) / (maxx - minx) * numRows), numRows-1);
 	row = Math.min(Math.floor((y - miny) / (maxy - miny) * numCols), numCols-1);
 
-	console.log(row, col);
-	
         data.push({
             x: (x - minx) / (maxx - minx) * size, 
             y: (y - miny) / (maxy - miny) * size,
@@ -76,12 +73,10 @@ var loadScatterPoints = function(points) {
  
 var onCellOver = function(cell, data) {
     if (data.points.length > 0) {
-	console.log(data.points[0]);
 	d3.json('/coordinates/' + data.points[0].ind, function(ret) {
+	    console.log('drawing');
 	    numAtoms = ret['x'].length;
 	    for (var i = 0; i < numAtoms; i++) {
-		console.log('ret.x[i]', ret.x[i]);
-		console.log('gmol atom i', glmol.atoms[i+1].x);
 		glmol.atoms[i+1].x = ret.x[i];
 		glmol.atoms[i+1].y = ret.y[i];
 		glmol.atoms[i+1].z = ret.z[i];

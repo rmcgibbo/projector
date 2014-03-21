@@ -7,7 +7,8 @@
     <link href='http://fonts.googleapis.com/css?family=Numans' rel='stylesheet' type='text/css'>
 
     <script type="text/javascript" src="js/viewer.js"></script>
-    <script type="text/javascript" src="js/heatmap.js"></script>
+    <script type="text/javascript" src="js/heatmap2.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
     <link rel="stylesheet" type="text/css" href="css/heatmap.css">
     <script type="text/javascript" src="GLmol/src/js/Three49custom.js"></script>
     <script type="text/javascript" src="GLmol/src/js/GLmol.js"></script>
@@ -16,7 +17,10 @@
 
 
 <div id="plots">
-    <div id="heatchartContainer"><div id="heatchart"></div></div>
+    <div id="heatmapContainer">
+      <svg style="z-index:1" id="heatmapsvg"></svg>
+      <canvas style="z-index:0" id="heatmapcanvas"></canvas>
+    </div>
     <div id="proteinViewContainer"><div id="proteinView"></div></div>
 </div>
 
