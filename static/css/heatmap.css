@@ -1,0 +1,38 @@
+body {
+ font-family: 'Numans', sans-serif;
+}
+
+
+div#scatterContainer, div#heatchartContainer {
+    float: left;
+    margin-left: 15px;
+    width: 400px;
+    height: 400px;
+    border: 1px solid #ccc;
+}
+
+
+
+circle {
+    fill: #063;
+}
+
+
+
+/* glmol */
+
+#proteinViewContainer {
+    float: left;
+    width: 400px;
+    height: 400px;
+    border: 1px solid #ccc;
+    margin: auto; 
+    position: relative;
+    margin-left: 15px;
+}
+
+#proteinView {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+}
