@@ -1,0 +1,48 @@
+body {
+    font-family: 'Numans', sans-serif;
+    position: relative;
+}
+
+svg,
+canvas {
+  position: absolute;
+}
+
+.axis text {
+  font: 18px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  display: none;
+}
+
+
+
+#heatmapContainer {
+    float: left;
+    margin-left: 15px;
+    border: 1px solid #ccc;
+}
+
+
+#proteinViewContainer {
+    float: left;
+    width: 700px;
+    height: 700px;
+    border: 1px solid #ccc;
+    margin: auto; 
+    margin-left: 15px;
+}
+
+#proteinView {
+    position: absolute;
+    width: 700px;
+    height: 700px;
+}
