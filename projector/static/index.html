@@ -39,8 +39,14 @@
   </div>
   <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
+        <li id="nav-plot"><a href="#" onclick="
+            $('#tab-plot').show(); $('#nav-plot').addClass('active');
+            $('#tab-about').hide(); $('#nav-about').removeClass('active');">
+            Home</a></li>
+        <li id="nav-about"><a href="#" onclick="
+            $('#tab-about').show(); $('#nav-about').addClass('active');
+            $('#tab-plot').hide(); $('#nav-plot').removeClass('active');">
+            About</a></li>
         <li><a href="https://github.com/rmcgibbo/projector">Issues</a></li>
       </ul>
 
@@ -55,17 +61,29 @@
 </div><!--/.container-fluid -->
 </div>
 
-<div class="container" style="padding-top:10px">
+<div class="container" style="padding-top:10px">  <!-- contents of the central screen -->
+
+<!-- main tab. home page -->
+<div id="tab-plot">
     <div id="heatmapContainer">
       <svg ng-mousemove="p.heatmapMouseMove($event)" style="z-index:1" id="heatmapsvg"></svg>
       <canvas style="z-index:0" id="heatmapcanvas"></canvas>
     </div>
+    <div id="proteinViewContainer"><div id="proteinView"></div></div>
+</div>
 
-    <div id="proteinViewContainer">
-        <div id="proteinView"></div>
-    </div>
-</div> <!-- container with the two plots -->
+<!-- about page -->
+<div id="tab-about" style="display:none">
+    Help goes here
+</div>
+
+</div> <!-- contents of the central screen -->
+
+
+
+
 </div> <!-- glapp -->
+
 </div> <!-- wrapper -->
 
 
