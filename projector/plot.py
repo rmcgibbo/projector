@@ -50,7 +50,7 @@ from mixtape.cmdline import Command, argument, FlagAction
 
 class PlotCommand(Command, Flask):
     name = 'plot'
-    description = 'launch an interactive plot of a projection in the browser.'
+    description = 'Launch the interactive plot of a projection in the browser.'
     a1 = argument('projection-file')
     a2 = argument('--n-bins', type=int, default=50)
     a3 = argument('--debug', action=FlagAction, default=False)

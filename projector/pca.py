@@ -36,7 +36,7 @@ from mixtape.cmdline import Command, argument, argument_group
 
 class PCACommand(Command):
     name = 'pca'
-    description = 'compute a projection with principle components analysis (PCA).'
+    description = 'Compute 2D projection with principle components analysis (PCA).'
 
     g = argument_group('required argument')
     g.add_argument('--featurizer', required=True, help='''Path to a featurizer
@@ -50,22 +50,25 @@ class PCACommand(Command):
 
     def __init__(self, args):
         self.args = args
+        from sklearn.decomposition import PCA
+        self.model = PCA(n_components=2)
+        self.labels = ['PC1', 'PC2']
 
     def start(self):
         import pickle
         from mdtraj import io
         from glob import glob
         import numpy as np
-        from sklearn.decomposition import PCA
 
         featurizer = np.load(self.args.featurizer)
         topology = featurizer.reference_traj
         filenames = [fn for t in self.args.trajectories for fn in glob(t)]
 
         X, indices, fns = featurize_all(filenames, featurizer, topology)
-        y = PCA(n_components=2).fit_transform(X)
-        labels = np.array(['PC1', 'PC2'])
+        y = self.model.fit_transform(X)
 
-        io.saveh(self.args.out, X=y, indices=indices, fns=fns, labels=labels,
-                 featurizer=np.array([pickle.dumps(featurizer)]))
-        print('PCA projection saved: %s' % self.args.out)
+        io.saveh(
+            self.args.out, X=y, indices=indices, fns=fns,
+            labels=np.array(self.labels),
+            featurizer=np.array([pickle.dumps(featurizer)]))
+        print('Projection saved: %s' % self.args.out)

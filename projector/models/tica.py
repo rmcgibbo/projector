@@ -6,7 +6,7 @@ from sklearn.utils import array2d
 __all__ = ['tICA']
 
 class tICA(object):
-    """Time-structure based independent component analysis (tICA)
+    """Time-structure independent component analysis (tICA)
 
     Linear dimensionality reduction using an eigendecomposition of the 
     time-lag correlation matrix and covariance matrix of the data and keeping

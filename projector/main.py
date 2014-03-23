@@ -33,7 +33,7 @@ in the browser with HTML5 and WebGL."""
 #-----------------------------------------------------------------------------
 from mixtape.cmdline import App
 # the commands register themselves when they're imported
-from projector import pca, plot
+from projector import pca, plot, tica
 
 def main():
     app = App(name='projector', description=__doc__)
