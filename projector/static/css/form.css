@@ -1,0 +1,33 @@
+.form-small {
+    width: 235px;
+    margin-top: 5px;
+}
+.form-small .control-label {
+    font-weight: 500;
+    text-align: left;
+    width: 95px;
+    margin-left: 10px;
+    padding-right: 0px;
+}
+
+.form-small .form-control {
+    width: 120px;
+    font-size: 13px;
+    
+}
+/*
+.form-medium .control-label {
+    width: 180px;
+}
+
+.form-medium .controls {
+    margin-left: 200px;
+}
+
+.form-xlarge .control-label {
+    width: 240px;
+}
+
+.form-xlarge .controls {
+    margin-left: 260px;
+}*/

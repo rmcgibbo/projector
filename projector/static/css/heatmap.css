@@ -27,15 +27,15 @@ canvas {
 
 #heatmapContainer {
     float: left;
-    margin-left: 15px;
-    border: 1px solid #ccc;
+    width: 550px;
+    height: 550px;
 }
 
 
 #proteinViewContainer {
     float: left;
-    width: 700px;
-    height: 700px;
+    width: 502px;
+    height: 502px;
     border: 1px solid #ccc;
     margin: auto; 
     margin-left: 15px;
@@ -43,6 +43,7 @@ canvas {
 
 #proteinView {
     position: absolute;
-    width: 700px;
-    height: 700px;
+    width: 500px;
+    height: 500px;
 }
+
