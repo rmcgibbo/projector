@@ -16,6 +16,8 @@
     <script type="text/javascript" src="js/main.js"></script>
     <link rel="stylesheet" type="text/css" href="css/heatmap.css">
     <link rel="stylesheet" type="text/css" href="css/form.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+
     <script type="text/javascript" src="js/libs/Three49custom.js"></script>
     <script type="text/javascript" src="js/GLmol.js"></script>
     <script type="text/javascript" src="js/navbar-extra.js"></script>
@@ -24,63 +26,76 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.3/angular.min.js"></script>
     <script src="js/glapp.js"></script>
 
-<style>
-/*    #proteinControls {float:right; width: 250px; }
-    #proteinControls > span { float: left; }
-    #proteinControls > select { float: right; }
-    #proteinControls > input { float: right; }*/
-
-    .clr {clear: both;}
-
-</style>
 <body>
-<div class="container">
+<div class="wrapper">
 
-<div ng-app="glapp" id="ProteinViewController"
-ng-init="p.update()" ng-controller="ProteinViewController as p">
+<div ng-app="glapp" id="ProteinViewController" ng-init="p.update()" ng-controller="ProteinViewController as p">
 
-      <!-- Static navbar -->
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">Projector</a>
+<!-- Static navbar -->
+<div class="navbar navbar-default navbar-static-top" role="navigation">
+<div class="container-fluid">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">Projector</a>
+  </div>
+  <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="https://github.com/rmcgibbo/projector">Issues</a></li>
+      </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Viewer Controls <b class="caret"></b></a>
+          <div class="dropdown-menu" id="insertProteinControlsHere">
           </div>
-          <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav navbar-right">
-              <li>
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Viewer Controls <b class="caret"></b></a>
-                  <div class="dropdown-menu" id="insertProteinControlsHere">
-                  </div>
-              </li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
-      </div>
-      
-
-
-
-
-<div id="heatmapContainer">
-  <svg ng-mousemove="p.heatmapMouseMove($event)" style="z-index:1" id="heatmapsvg"></svg>
-  <canvas style="z-index:0" id="heatmapcanvas"></canvas>
+      </li>
+    </ul>
+  </div><!--/.nav-collapse -->
+</div><!--/.container-fluid -->
 </div>
 
+<div class="container" style="padding-top:10px">
+    <div id="heatmapContainer">
+      <svg ng-mousemove="p.heatmapMouseMove($event)" style="z-index:1" id="heatmapsvg"></svg>
+      <canvas style="z-index:0" id="heatmapcanvas"></canvas>
+    </div>
 
-<div id="proteinViewContainer">
-    <div id="proteinView"></div>
+    <div id="proteinViewContainer">
+        <div id="proteinView"></div>
+    </div>
+</div> <!-- container with the two plots -->
+</div> <!-- glapp -->
+</div> <!-- wrapper -->
+
+
+<footer>
+<div class="col-md-2"></div>
+    <div class="col-md-8">
+      <p class="text-muted credit">
+      Author: <a href="http://stanford.edu/~rmcgibbo/">Robert McGibbon</a>.
+      &nbsp; Copyright: (c) 2014 Stanford University.
+      &nbsp; License: BSD 2-clause.</p>
 </div>
+</footer>
+
+
+<!-- <div class="col-md-12 clear-for-footer"></div>
+<div class="wrap footer">
+
+</div> -->
+
+
+</body>
+</html>
+
+
+<!-- ===================================================================== -->
+<!-- This will get injected into the DOM inside of the navbar at load. I   -->
+<!-- just left it out here for clarity - it get hard to read when nested   -->
+<!-- ===================================================================== -->
 
 <div id="proteinControls">
-
-
-<div>
 <form class="form-horizontal form-small">
 <fieldset>
 
@@ -156,12 +171,4 @@ ng-init="p.update()" ng-controller="ProteinViewController as p">
 
 </fieldset>
 </form>
-</div>
 
-
-</div> <!-- proteinControls -->
-</div> <!-- glapp -->
-
-</div> <!-- container -->
-</body>
-</html>
