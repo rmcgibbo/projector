@@ -21,7 +21,6 @@ class tICA(object):
         Delay time forward or backward in the input data. The time-lagged
         correlations is computed between datas X[t] and X[t+offset].
 
-
     Attributes
     ----------
     `components_` : array-like, shape (n_components, n_features)
@@ -32,6 +31,12 @@ class tICA(object):
     `means_` : array, shape (n_features,)
     `n_observations` : int
     `n_sequences` : int
+
+    References
+    ----------
+    .. [1] Schwantes, Christian R., and Vijay S. Pande. J. Chem Theory Comput.
+    9.4 (2013): 2000-2009.
+    .. [2] Perez-Hernandez, Guillermo, et al. J Chem. Phys (2013): 015102.
     """
     
     def __init__(self, n_components=None, offset=1):
