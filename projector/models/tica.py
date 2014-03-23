@@ -235,5 +235,5 @@ class tICA(object):
         self._outer_0_to_TminusTau = np.dot(X[:-self.offset].T, X[:-self.offset])
         self._outer_offset_to_T = np.dot(X[self.offset:].T, X[self.offset:])
 
-        self._is_ditry = True
+        self._is_dirty = True
 
