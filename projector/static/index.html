@@ -5,7 +5,7 @@
     <script src="js/libs/d3.v2.min.js"></script>
     <script src="js/libs/colorbrewer.v1.min.js"></script>
     <script src="js/libs/jquery.min.js"></script>
-    <link href='http://fonts.googleapis.com/css?family=Numans' rel='stylesheet' type='text/css'>
+<!--     <link href='http://fonts.googleapis.com/css?family=Numans' rel='stylesheet' type='text/css'> -->
 
     <script type="text/javascript" src="js/viewer.js"></script>
     <script type="text/javascript" src="js/heatmap2.js"></script>
@@ -14,15 +14,84 @@
     <script type="text/javascript" src="js/libs/Three49custom.js"></script>
     <script type="text/javascript" src="js/GLmol.js"></script>
 
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.3/angular.min.js"></script>
+    <script src="js/glapp.js"></script>
+
+<style>
+    #proteinControls {float:right; width: 250px; }
+    #proteinControls > span { float: left; }
+    #proteinControls > select { float: right; }
+    #proteinControls > input { float: right; }
+
+    .clr {clear: both;}
+
+</style>
+
 <h1>Projector</h1>
 
 
-<div id="plots">
-    <div id="heatmapContainer">
-      <svg style="z-index:1" id="heatmapsvg"></svg>
-      <canvas style="z-index:0" id="heatmapcanvas"></canvas>
-    </div>
-    <div id="proteinViewContainer"><div id="proteinView"></div></div>
+<div ng-app="glapp"
+id="ProteinViewController"
+ng-init="p.update()" 
+ng-controller="ProteinViewController as p">
+
+
+<div id="heatmapContainer">
+  <svg ng-mousemove="p.heatmapMouseMove($event)" style="z-index:1" id="heatmapsvg"></svg>
+  <canvas style="z-index:0" id="heatmapcanvas"></canvas>
 </div>
+
+
+<div id="proteinViewContainer">
+    <div id="proteinView"></div>
+</div>
+
+<div id="proteinControls">
+
+    <span>Color</span>
+    <select class="algnRight" ng-model="p.form.color" ng-options="e.value
+         as e.name for e in p.colorOptions"
+         ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Main Chain</span>
+    <select class="algnRight" ng-model="p.form.mainChain" ng-options="e.value
+        as e.name for e in p.mainChainOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Side chains</span>
+    <select class="algnRight" ng-model="p.form.sideChains"
+        ng-options="e.value as e.name for e in p.sideChainsOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Nonbonded atoms</span>
+    <select class="algnRight" ng-model="p.form.nonbondedAtoms"
+        ng-options="e.value as e.name for e in p.nonbondedAtomsOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Heteroatoms</span>
+    <select class="algnRight" ng-model="p.form.heteroAtoms"
+        ng-options="e.value as e.name for e in p.heteroAtomsOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Background</span>
+    <select class="algnRight" ng-model="p.form.backgroundColor"
+        ng-options="e.value as e.name for e in p.backgroundColorOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+    <span>Projection</span>
+    <select class="algnRight" ng-model="p.form.projection"
+        ng-options="e.value as e.name for e in p.projectionOptions"
+        ng-change="p.update()" required></select>
+    <div class="clr"></div>
+
+</div> <!-- proteinControls -->
+</div> <!-- glapp -->
+
 
 </html>

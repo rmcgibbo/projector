@@ -1469,15 +1469,80 @@ GLmol.prototype.drawSymmetryMatesWithTranslation2 = function(group, asu, matrice
    }
 };
 
-GLmol.prototype.defineRepresentation = function() {
+GLmol.prototype.defineRepresentation = function(representationOptions) {
     var all = this.getAllAtoms();
     var hetatm = this.removeSolvents(this.getHetatms(all));
-    this.colorByAtom(all, {});
-    this.colorByChain(all);
+    var doNotSmoothen = false;
 
-    this.drawAtomsAsSphere(this.modelGroup, hetatm, this.sphereRadius); 
-    this.drawMainchainCurve(this.modelGroup, all, this.curveWidth, 'P');
-    this.drawCartoon(this.modelGroup, all, this.curveWidth);
+    this.colorByAtom(all, {});
+
+    var asu = this.modelGroup;
+    var colorMode = representationOptions.color;
+    var mainchainMode = representationOptions.mainChain;
+    var hetatmMode = representationOptions.heteroAtomsOptions;
+    var projectionMode = representationOptions.projection;
+    var sideChains = representationOptions.sideChains;
+
+    if (colorMode == 'ss') {
+        this.colorByStructure(all, 0xcc00cc, 0x00cccc);
+    } else if (colorMode == 'chain') {
+        this.colorByChain(all);
+    } else if (colorMode == 'chainbow') {
+        this.colorChainbow(all);
+    } else if (colorMode == 'b') {
+        this.colorByBFactor(all);
+    } else if (colorMode == 'polarity') {
+        this.colorByPolarity(all, 0xcc0000, 0xcccccc);
+    }
+
+    if (mainchainMode == 'ribbon') {
+        this.drawCartoon(asu, all, doNotSmoothen);
+        this.drawCartoonNucleicAcid(asu, all);
+    } else if (mainchainMode == 'thickRibbon') {
+        this.drawCartoon(asu, all, doNotSmoothen, this.thickness);
+        this.drawCartoonNucleicAcid(asu, all, null, this.thickness);
+    } else if (mainchainMode == 'strand') {
+        this.drawStrand(asu, all, null, null, null, null, null, doNotSmoothen);
+        this.drawStrandNucleicAcid(asu, all);
+    } else if (mainchainMode == 'chain') {
+        this.drawMainchainCurve(asu, all, this.curveWidth, 'CA', 1);
+        this.drawMainchainCurve(asu, all, this.curveWidth, 'O3\'', 1);
+    } else if (mainchainMode == 'cylinderHelix') {
+        this.drawHelixAsCylinder(asu, all, 1.6);
+        this.drawCartoonNucleicAcid(asu, all);
+    } else if (mainchainMode == 'tube') {
+        this.drawMainchainTube(asu, all, 'CA');
+        this.drawMainchainTube(asu, all, 'O3\''); // FIXME: 5' end problem!
+    } else if (mainchainMode == 'bonds') {
+        this.drawBondsAsLine(asu, all, this.lineWidth);
+    }
+
+   if (hetatmMode == 'stick') {
+      this.drawBondsAsStick(target, hetatm, this.cylinderRadius, this.cylinderRadius, true);
+   } else if (hetatmMode == 'sphere') {
+       this.drawAtomsAsSphere(target, hetatm, this.sphereRadius);
+   } else if (hetatmMode == 'line') {
+       this.drawBondsAsLine(target, hetatm, this.curveWidth);
+   } else if (hetatmMode == 'icosahedron') {
+       this.drawAtomsAsIcosahedron(target, hetatm, this.sphereRadius);
+   } else if (hetatmMode == 'ballAndStick') {
+       this.drawBondsAsStick(target, hetatm, this.cylinderRadius / 2.0, this.cylinderRadius, true, false, 0.3);
+   } else if (hetatmMode == 'ballAndStick2') {
+       this.drawBondsAsStick(target, hetatm, this.cylinderRadius / 2.0, this.cylinderRadius, true, true, 0.3);
+   }
+
+   if (sideChains == 'line') {
+       this.drawBondsAsLine(this.modelGroup, this.getSidechains(all), this.lineWidth);
+   }
+
+   // if (projectionMode == 'perspective') {
+   //     this.camera = this.perspectiveCamera;
+   // } else if (projectionMode == 'orthoscopic') {
+   //     this.camera = this.orthoscopicCamera;
+   // }
+
+   this.setBackground(representationOptions.backgroundColor);
+
 };
 
 GLmol.prototype.getView = function() {
@@ -1541,12 +1606,12 @@ GLmol.prototype.zoomInto = function(atomlist, keepSlab) {
    this.rotationGroup.quaternion = new THREE.Quaternion(1, 0, 0, 0);
 };
 
-GLmol.prototype.rebuildScene = function() {
+GLmol.prototype.rebuildScene = function(representationOptions) {
    time = new Date();
 
    var view = this.getView();
    this.initializeScene();
-   this.defineRepresentation();
+   this.defineRepresentation(representationOptions);
    this.setView(view);
 
    //console.log("builded scene in " + (+new Date() - time) + "ms");

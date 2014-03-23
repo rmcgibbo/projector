@@ -7,7 +7,7 @@ var xScale = null,
     yScale = null;
     
     
-function handleHeatMapMouseMove(event) {
+function handleHeatMapMouseMove(event, representationOptions, onFinish) {
     var rect = $("#heatmapcanvas")[0].getBoundingClientRect();
     var xx = xScale.invert(event.clientX - rect.left);
     var yy = yScale.invert(event.clientY - rect.top);
@@ -19,17 +19,10 @@ function handleHeatMapMouseMove(event) {
             glmol.atoms[i+1].y = ret.y[i];
             glmol.atoms[i+1].z = ret.z[i];
         }
-        glmol.rebuildScene(true);
+        glmol.rebuildScene(representationOptions);
         glmol.show();
     })
-    .done(function() {
-        // only let this callback get called once every "lag" miliseconds
-        // to avoid taking the GPU too much
-        var lag = 200;
-        setTimeout(function() {
-            $("#heatmapsvg").one('mousemove', handleHeatMapMouseMove);
-        }, lag);
-    });
+    .done(onFinish);
 }
 
 var createHeatmap = function(data) {
@@ -62,8 +55,6 @@ var createHeatmap = function(data) {
       .orient("right")
       .ticks(10);
 
-  $("#heatmapsvg").one('mousemove', handleHeatMapMouseMove);
-      
   var svg = d3.select("#heatmapsvg")
       .attr("width", width)
       .attr("height", height);
