@@ -74,9 +74,5 @@ angular.module('glapp', [])
             }, 100);
         });
     };
-    
-    this.logchange = function logchange() {
-        console.log('change!');
-    }
-    
+
 });
