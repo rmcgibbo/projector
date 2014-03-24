@@ -33,14 +33,13 @@
 from __future__ import print_function, division, absolute_import
 import os
 import json
-import webbrowser
 import pickle
 import tempfile
+import six
 
-from flask import Flask, request
 import numpy as np
+from flask import Flask, request
 
-from mixtape.featurizer import featurize_all
 from mixtape.cmdline import Command, argument, FlagAction
 
 #-----------------------------------------------------------------------------
@@ -60,8 +59,7 @@ class PlotCommand(Command, Flask):
         import pylru
         from mdtraj import io
         from scipy.spatial import cKDTree
-        
-        
+
         self.args = args
         self.data = io.loadh(args.__dict__['projection-file'], deferred=False)
         self.kdtree = cKDTree(self.data['X'])
@@ -76,8 +74,8 @@ class PlotCommand(Command, Flask):
         self._last_index = 0
 
         static_folder = os.path.join(os.path.dirname(__file__), 'static')
-        super(PlotCommand, self).__init__(
-            __name__, static_folder=static_folder)
+        s = super(PlotCommand, self) if six.PY2 else super()
+        s.__init__(__name__, static_folder=static_folder)
 
     def start(self):
 
@@ -90,16 +88,20 @@ class PlotCommand(Command, Flask):
         self.add_url_rule('/xy', 'handle_xy', self.handle_xy)
 
         self.handle_heatmap_json()
-        print('\n', '='*20, 'OPEN YOUR BROWSER TO SEE THE PLOT', '='*20)
+        print('\n', '=' * 20, 'OPEN YOUR BROWSER TO SEE THE PLOT', '=' * 20)
         self.run(debug=self.args.debug)
 
     def load_frame(self, filename, index):
         import mdtraj as md
 
         if filename not in self._traj_cache:
-            self._traj_cache[filename] = md.load(filename, top=self.top)
+            print('loading %s...' % filename)
+            kwargs = {'top': self.top} if os.path.splitext(
+                filename)[1] in {'.h5', '.lh5', '.pdb'} else {}
+            self._traj_cache[filename] = md.load(filename, **kwargs)
             self._traj_cache[filename].center_coordinates()
-            self._traj_cache[filename].superpose(self.top)
+
+            print('...done loading')
 
         return self._traj_cache[filename][index]
 
@@ -145,9 +147,12 @@ class PlotCommand(Command, Flask):
             oldframe = self.load_frame(
                 self.data['fns'][self._last_index],
                 self.data['indices'][self._last_index])
-
-            frame.superpose(oldframe, atomindices=self.alpha_carbon_indices)
+            superpose_target = oldframe
             self._last_index = index
+        else:
+            superpose_target = self.top
+
+        frame.superpose(superpose_target, atom_indices=self.alpha_carbon_indices)
 
         # convert to angstroms
         xyz = frame.xyz[0] * 10.0

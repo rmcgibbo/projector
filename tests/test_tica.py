@@ -16,7 +16,7 @@ y2 = tica2.fit_transform(np.copy(X))
 
 
 np.testing.assert_array_almost_equal(tica1.corrs, tica2._outer_0_to_T_lagged)
-np.testing.assert_array_almost_equal(tica1.sum_t, tica2._sum_0_to_TminusTau)
+np.testing.assert_array_almost_equal(tica1.sum_t, tica2._sum_0_to_TminusOffset)
 np.testing.assert_array_almost_equal(tica1.sum_t_dt, tica2._sum_tau_to_T)
 np.testing.assert_array_almost_equal(tica1.sum_all, tica2._sum_0_to_T)
 
