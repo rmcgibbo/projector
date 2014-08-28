@@ -36,11 +36,17 @@ import json
 import pickle
 import tempfile
 import six
+import operator
+from itertools import groupby
+from six.moves import zip
 
 import numpy as np
 from flask import Flask, request
 
+import mdtraj as md
 from mixtape.cmdline import Command, argument, FlagAction
+
+CHAIN_NAMES = [chr(ord('A') + i) for i in range(26)]
 
 #-----------------------------------------------------------------------------
 # Code
@@ -105,6 +111,24 @@ class PlotCommand(Command, Flask):
 
         return self._traj_cache[filename][index]
 
+    def compute_secondary(self, frame):
+        dssp = md.compute_dssp(frame, simplified=True)[0]
+        helices, sheets = [], []
+        
+        for k, g in groupby(enumerate(dssp), operator.itemgetter(1)):
+            indices, keys = list(zip(*g))
+            start_residue = indices[0]
+            end_residue = indices[-1]
+            run = [CHAIN_NAMES[self.top.topology.residue(start_residue).chain.index],
+                   start_residue,
+                   CHAIN_NAMES[self.top.topology.residue(end_residue).chain.index],
+                   end_residue]
+            if k == 'H':
+                helices.append(run)
+            elif k == 'E':
+                sheets.append(run)
+        return helices, sheets
+
     # -------------------------------------------------------------------------#
 
     def handle_index(self):
@@ -117,7 +141,11 @@ class PlotCommand(Command, Flask):
         return self.send_static_file(os.path.join('css', path))
 
     def handle_pdb(self):
-        return self.topology_pdb_sring
+        helices, sheets = self.compute_secondary(self.top)
+        return json.dumps({
+            'pdbstring': self.topology_pdb_sring,
+            'helices': helices,
+            'sheets': sheets})
 
     def handle_heatmap_json(self):
         x = self.data['X'][:, 0]
@@ -133,7 +161,6 @@ class PlotCommand(Command, Flask):
         })
 
     def handle_xy(self):
-
         x = float(request.args.get('x', 0))
         y = float(request.args.get('y', 0))
 
@@ -153,14 +180,16 @@ class PlotCommand(Command, Flask):
             superpose_target = self.top
 
         frame.superpose(superpose_target, atom_indices=self.alpha_carbon_indices)
-
+        helices, sheets = self.compute_secondary(frame)
         # convert to angstroms
         xyz = frame.xyz[0] * 10.0
 
         return json.dumps({
             'x': xyz[:, 0].tolist(),
             'y': xyz[:, 1].tolist(),
-            'z': xyz[:, 2].tolist()
+            'z': xyz[:, 2].tolist(),
+            'helices': helices,
+            'sheets': sheets,
         })
 
 

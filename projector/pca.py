@@ -65,10 +65,10 @@ class PCACommand(Command):
         filenames = [fn for t in self.args.trajectories for fn in glob(t)]
 
         X, indices, fns = featurize_all(filenames, featurizer, topology)
-        y = self.model.fit_transform(X)
+        y = self.model.fit_transform([X])
 
         io.saveh(
-            self.args.out, X=y, indices=indices, fns=fns,
+            self.args.out, X=y[0], indices=indices, fns=fns,
             labels=np.array(self.labels),
             featurizer=np.array([pickle.dumps(featurizer)]))
         print('Projection saved: %s' % self.args.out)

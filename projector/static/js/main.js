@@ -1,7 +1,8 @@
 $(function() {
     glmol = new GLmol('proteinView', true);
-    $.get("pdb", function(ret) {
-      glmol.loadMoleculeStr(false, ret);
+    $.getJSON("pdb", function(ret) {
+      glmol.loadMoleculeStr(false, ret.pdbstring);
+      glmol.assignSecondary(ret.helices, ret.sheets);
 
       var representationOptions = angular.element($('#ProteinViewController'))
           .scope().p.getRepresentationOptions();

@@ -311,10 +311,21 @@ GLmol.prototype.parsePDB2 = function(str) {
               // TODO: Implement me!
       }
    }
+   this.assignSecondary(protein.helix, protein.sheet);
+   protein.smallMolecule = false;
+   return true;
+};
+
+GLmol.prototype.assignSecondary = function(helix, sheet) {
+   this.protein.helix = helix;
+   this.protein.sheet = sheet;
+   var atoms = this.atoms;
+   var protein = this.protein;
 
    // Assign secondary structures 
    for (i = 0; i < atoms.length; i++) {
       atom = atoms[i]; if (atom == undefined) continue;
+      atom.ss = 'c';
 
       var found = false;
       // MEMO: Can start chain and end chain differ?
@@ -335,9 +346,7 @@ GLmol.prototype.parsePDB2 = function(str) {
          else if (atom.resi == protein.helix[j][3]) atom.ssend = true;
       }
    }
-   protein.smallMolecule = false;
-   return true;
-};
+}
 
 // Catmull-Rom subdivision
 GLmol.prototype.subdivide = function(_points, DIV) { // points as Vector3

@@ -22,6 +22,7 @@ function handleHeatMapMouseMove(event, representationOptions, onFinish) {
             glmol.atoms[i + 1].y = ret.y[i];
             glmol.atoms[i + 1].z = ret.z[i];
         }
+        glmol.assignSecondary(ret.helices, ret.sheets);
         glmol.rebuildScene(representationOptions);
         glmol.show();
     }).done(onFinish);

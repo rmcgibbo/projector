@@ -45,7 +45,7 @@ class tICACommand(PCACommand):
     g.add_argument('--featurizer', required=True, help='''Path to a featurizer
         pickle. These can be created with the 'hmsm featurizer' command in
         mixtape.''')
-    g.add_argument('--offset', required=True, type=int, help='''Delay time
+    g.add_argument('--lag-time', required=True, type=int, help='''Delay time
         forward or backward in the input data. tICA is based on time-lagged
         correlations is computed between frames X[t] and X[t+offset]. `offset`
         is interpreted as an integer index -- its value in physical units
@@ -59,11 +59,11 @@ class tICACommand(PCACommand):
         (default=pca-projection.h5)''')
 
     def __init__(self, args):
-        from projector.models.tica import tICA
-        if args.offset <= 0:
+        from mixtape.tica import tICA
+        if args.lag_time <= 0:
             self.error('offset must be greater than or equal to zero')
         self.args = args
-        self.model = tICA(n_components=2, offset=self.args.offset)
+        self.model = tICA(n_components=2, lag_time=self.args.lag_time)
         self.labels = ['tIC1', 'tIC2']
 
     # inherit start() from PCA
