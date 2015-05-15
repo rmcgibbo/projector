@@ -31,7 +31,7 @@ in the browser with HTML5 and WebGL."""
 #-----------------------------------------------------------------------------
 # Imports
 #-----------------------------------------------------------------------------
-from mixtape.cmdline import App
+from msmbuilder.cmdline import App
 # the commands register themselves when they're imported
 from projector import pca, plot, tica
 

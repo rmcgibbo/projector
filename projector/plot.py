@@ -44,7 +44,7 @@ import numpy as np
 from flask import Flask, request
 
 import mdtraj as md
-from mixtape.cmdline import Command, argument, FlagAction
+from msmbuilder.cmdline import Command, argument, FlagAction
 
 CHAIN_NAMES = [chr(ord('A') + i) for i in range(26)]
 

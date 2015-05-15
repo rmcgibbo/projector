@@ -31,7 +31,7 @@
 #-----------------------------------------------------------------------------
 
 from __future__ import print_function, division, absolute_import
-from mixtape.cmdline import argument, argument_group
+from msmbuilder.cmdline import argument, argument_group
 from projector.pca import PCACommand
 
 __all__ = ['tICACommand']
@@ -39,6 +39,8 @@ __all__ = ['tICACommand']
 
 class tICACommand(PCACommand):
     name = 'tica'
+    _group = 0
+    _concrete = True
     description = 'Compute 2D projection with time-structure independent components analyis (tICA)'
 
     g = argument_group('required arguments')

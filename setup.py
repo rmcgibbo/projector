@@ -80,9 +80,9 @@ setup(
     zip_safe=False,
     entry_points={'console_scripts': ['projector = projector.main:main']})
 
-warn_on_version('mdtraj', '0.8.0', recommend_conda=False)
-warn_on_version('sklearn', '0.9.0', package_name='scikit-learn')
-warn_on_version('flask', '0.9.0')
-warn_on_version('scipy', '0.9.0')
-warn_on_version('pylru', recommend_conda=False)
-warn_on_version('mixtape', instructions='Get mixtape from https://github.com/rmcgibbo/mixtape')
+#warn_on_version('mdtraj', '0.8.0', recommend_conda=False)
+#warn_on_version('sklearn', '0.9.0', package_name='scikit-learn')
+#warn_on_version('flask', '0.9.0')
+#warn_on_version('scipy', '0.9.0')
+#warn_on_version('pylru', recommend_conda=False)
+#warn_on_version('mixtape', instructions='Get mixtape from https://github.com/rmcgibbo/mixtape')

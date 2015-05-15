@@ -30,12 +30,14 @@
 # Imports
 #-----------------------------------------------------------------------------
 from __future__ import print_function, division, absolute_import
-from mixtape.featurizer import featurize_all
-from mixtape.cmdline import Command, argument, argument_group
+from msmbuilder.featurizer import featurize_all
+from msmbuilder.cmdline import Command, argument, argument_group
 
 
 class PCACommand(Command):
     name = 'pca'
+    _group = 0
+    _concrete = True
     description = 'Compute 2D projection with principle components analysis (PCA).'
 
     g = argument_group('required argument')
