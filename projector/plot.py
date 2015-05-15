@@ -104,8 +104,8 @@ class PlotCommand(Command, Flask):
 
         if filename not in self._traj_cache:
             print('loading %s...' % filename)
-            kwargs = {'top': self.top} if os.path.splitext(
-                filename)[1] in {'.h5', '.lh5', '.pdb'} else {}
+            kwargs = {} if os.path.splitext(
+                filename)[1] in {'.h5', '.lh5', '.pdb'} else {'top': self.top}
             self._traj_cache[filename] = md.load(filename, **kwargs)
             self._traj_cache[filename].center_coordinates()
 
@@ -116,7 +116,7 @@ class PlotCommand(Command, Flask):
     def compute_secondary(self, frame):
         dssp = md.compute_dssp(frame, simplified=True)[0]
         helices, sheets = [], []
-        
+
         for k, g in groupby(enumerate(dssp), operator.itemgetter(1)):
             indices, keys = list(zip(*g))
             start_residue = indices[0]
@@ -169,7 +169,7 @@ class PlotCommand(Command, Flask):
         _, index = self.kdtree.query(x=[x, y], k=1)
 
         frame = self.load_frame(
-            self.data['fns'][index],
+            self.data['fns'][index].decode('utf-8'),
             self.data['indices'][index])
 
         if self.args.progressive:
