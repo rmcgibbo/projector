@@ -46,6 +46,7 @@ class PCACommand(Command):
         mixtape.''')
     a1 = argument('trajectories', nargs='+', help='''Path to one or more MD
         trajectory files or glob patterns that match MD trajectory files.''')
+    a2 = argument('--top', '--topology', help='Path to topology file')
     a2 = argument('--out', default='pca-projection.h5', help='''The results
         will be saved to this path as a .h5 file using mdtraj.io.saveh().
         (default=pca-projection.h5)''')
@@ -54,23 +55,26 @@ class PCACommand(Command):
         self.args = args
         from sklearn.decomposition import PCA
         self.model = PCA(n_components=2)
-        self.labels = ['PC1', 'PC2']
+        self.labels = [b'PC1', b'PC2']
 
     def start(self):
         import pickle
+        import mdtraj as md
         from mdtraj import io
         from glob import glob
         import numpy as np
 
         featurizer = np.load(self.args.featurizer)
-        topology = featurizer.reference_traj
+        topology = md.load(self.args.top)
         filenames = [fn for t in self.args.trajectories for fn in glob(t)]
 
         X, indices, fns = featurize_all(filenames, featurizer, topology)
         y = self.model.fit_transform([X])
+        fns = np.array([fn.encode('utf-8') for fn in fns])
 
         io.saveh(
             self.args.out, X=y[0], indices=indices, fns=fns,
             labels=np.array(self.labels),
+            topology = np.array([pickle.dumps(topology)]),
             featurizer=np.array([pickle.dumps(featurizer)]))
         print('Projection saved: %s' % self.args.out)

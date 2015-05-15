@@ -56,16 +56,17 @@ class tICACommand(PCACommand):
 
     a1 = argument('trajectories', nargs='+', help='''Path to one or more MD
         trajectory files or glob patterns that match MD trajectory files.''')
-    a2 = argument('--out', default='tica-projection.h5', help='''The results
+    a2 = argument('--top', '--topology', help='Path to topology file')
+    a3 = argument('--out', default='tica-projection.h5', help='''The results
         will be saved to this path as a .h5 file using mdtraj.io.saveh().
         (default=pca-projection.h5)''')
 
     def __init__(self, args):
-        from mixtape.tica import tICA
+        from msmbuilder.decomposition import tICA
         if args.lag_time <= 0:
             self.error('offset must be greater than or equal to zero')
         self.args = args
         self.model = tICA(n_components=2, lag_time=self.args.lag_time)
-        self.labels = ['tIC1', 'tIC2']
+        self.labels = [b'tIC1', b'tIC2']
 
     # inherit start() from PCA

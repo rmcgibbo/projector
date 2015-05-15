@@ -55,6 +55,8 @@ CHAIN_NAMES = [chr(ord('A') + i) for i in range(26)]
 
 class PlotCommand(Command, Flask):
     name = 'plot'
+    _group = 1
+    _concrete = True
     description = 'Launch the interactive plot of a projection in the browser.'
     a1 = argument('projection-file')
     a2 = argument('--n-bins', type=int, default=50)
@@ -70,7 +72,7 @@ class PlotCommand(Command, Flask):
         self.data = io.loadh(args.__dict__['projection-file'], deferred=False)
         self.kdtree = cKDTree(self.data['X'])
 
-        self.top = pickle.loads(self.data['featurizer'][0]).reference_traj
+        self.top = pickle.loads(self.data['topology'][0])
         self.top.center_coordinates()
         self.topology_pdb_sring = pdb_string(self.top)
         self.alpha_carbon_indices = np.array(
