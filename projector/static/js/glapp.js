@@ -4,7 +4,8 @@ angular.module('glapp', [])
       { name: 'Spectrum', value: 'chainbow' }, 
       { name: 'Chain', value: 'chain' }, 
       { name: 'Secondary Structure', value: 'ss' },
-      { name: 'Polar/nonpolar', value: 'polarity' }
+      { name: 'Polar/nonpolar', value: 'polarity' },
+      { name: 'Variability', value: 'b' }
     ];
     this.mainChainOptions = [
         {name: 'Thick Ribbon', value: 'thickRibbon'},
