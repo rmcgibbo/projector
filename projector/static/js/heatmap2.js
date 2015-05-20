@@ -21,6 +21,7 @@ function handleHeatMapMouseMove(event, representationOptions, onFinish) {
             glmol.atoms[i + 1].x = ret.x[i];
             glmol.atoms[i + 1].y = ret.y[i];
             glmol.atoms[i + 1].z = ret.z[i];
+            glmol.atoms[i + 1].b = ret.variation[i];
         }
         glmol.assignSecondary(ret.helices, ret.sheets);
         glmol.rebuildScene(representationOptions);

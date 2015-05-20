@@ -41,6 +41,7 @@ from itertools import groupby
 from six.moves import zip
 
 import numpy as np
+from numpy.linalg import norm
 from flask import Flask, request
 
 import mdtraj as md
@@ -174,7 +175,7 @@ class PlotCommand(Command, Flask):
 
         if self.args.progressive:
             oldframe = self.load_frame(
-                self.data['fns'][self._last_index],
+                self.data['fns'][self._last_index].decode('utf-8'),
                 self.data['indices'][self._last_index])
             superpose_target = oldframe
             self._last_index = index
@@ -186,12 +187,31 @@ class PlotCommand(Command, Flask):
         # convert to angstroms
         xyz = frame.xyz[0] * 10.0
 
+        # Compute variation of each atom.
+        neighbordist, neighborindex = self.kdtree.query(x=self.data['X'][index], k=5)
+        meandist = np.zeros((frame.n_atoms,))
+        for i in neighborindex[1:]:
+            x0 = self.data['X'][index, 0]
+            y0 = self.data['X'][index, 1]
+            xi = self.data['X'][i, 0]
+            yi = self.data['X'][i, 1]
+            dist = np.sqrt((xi-x0)**2+(yi-y0)**2)
+            if dist > 0:
+                neighborframe = self.load_frame(
+                    self.data['fns'][i].decode('utf-8'),
+                    self.data['indices'][i])
+                neighborframe = neighborframe.superpose(frame, atom_indices=self.alpha_carbon_indices)
+                delta = neighborframe.xyz[0]-frame.xyz[0]
+                meandist += np.array([norm(d) for d in delta])/dist
+        meandist /= 2*np.average(meandist)
+
         return json.dumps({
             'x': xyz[:, 0].tolist(),
             'y': xyz[:, 1].tolist(),
             'z': xyz[:, 2].tolist(),
             'helices': helices,
             'sheets': sheets,
+            'variation': meandist.tolist(),
         })
 
 
